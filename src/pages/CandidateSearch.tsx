@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { searchGithub, searchGithubUser } from '../api/API';
 import { Candidate } from '../interfaces/Candidate.interface';
-import { saveCandidate, } from '../utils/localStorageUtils';
+import { saveCandidate } from '../utils/localStorageUtils';
 
 const CandidateSearch = () => {
   const [candidates, setCandidates] = useState<string[]>([]); // Store only the usernames initially
@@ -26,7 +26,14 @@ const CandidateSearch = () => {
       const fetchCandidateDetails = async () => {
         setLoading(true);
         const candidateData = await searchGithubUser(candidates[currentIndex]);
-        setCurrentCandidate(candidateData); // Set the detailed candidate data
+        
+        // If the candidate is valid, display their details; otherwise, skip
+        if (candidateData && candidateData.id) {
+          setCurrentCandidate(candidateData);
+        } else {
+          console.log("Failed to gather account: ", candidates[currentIndex])
+          handleNextCandidate(); // Skip invalid candidate
+        }
         setLoading(false);
       };
 
