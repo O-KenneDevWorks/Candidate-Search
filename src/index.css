@@ -118,3 +118,47 @@ tbody tr:nth-child(odd) {
   width: 80vw;
   table-layout: fixed;
 }
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px; /* Optional: Adjust spacing between buttons */
+}
+
+.circle-btn-minus {
+  background-color: red;
+  border: none;
+  color: black;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  font-size: 60px; /* Adjust font size */
+  line-height: 80px; /* Set line height to match button height */
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0;
+  line-height: 1; /* Ensure the line height doesn't affect vertical alignment */
+}
+
+.circle-btn-plus {
+  background-color: green;
+  border: none;
+  color: black;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  font-size: 80px; /* Adjust font size */
+  line-height: 80px; /* Set line height to match button height */
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  line-height: 1; /* Ensure the line height doesn't affect vertical alignment */
+}
