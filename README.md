@@ -93,10 +93,10 @@ Render will automatically pull updates from your GitHub repository whenever chan
 5. Remove saved candidates: You can remove a candidate from the saved list by clicking the remove button next to their profile.
 
 ### Home Page
-[![Home Page](public\CandidateSearchHome.png)]
+![Home Page](public\CandidateSearchHome.png)
 
 ### Potential Candidates Page
-[![Potential Candidates](public\CandidateSearchPotentialCandidates.png)]
+![Potential Candidates](public\CandidateSearchPotentialCandidates.png)
 
 ## Future Enhancements
 
