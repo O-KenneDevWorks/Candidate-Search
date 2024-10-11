@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { searchGithub, searchGithubUser } from '../api/API';
 import { Candidate } from '../interfaces/Candidate.interface';
+import { saveCandidate, } from '../utils/localStorageUtils';
 
 const CandidateSearch = () => {
   const [candidates, setCandidates] = useState<string[]>([]); // Store only the usernames initially
   const [currentCandidate, setCurrentCandidate] = useState<Candidate | null>(null); // Store detailed candidate info
   const [currentIndex, setCurrentIndex] = useState(0); // Track current candidate index
-  const [savedCandidates, setSavedCandidates] = useState<Candidate[]>([]); // Track saved candidates
   const [loading, setLoading] = useState(true); // Loading state for fetching candidates
 
   // Fetch a list of candidate usernames on component mount
@@ -35,20 +35,18 @@ const CandidateSearch = () => {
   }, [currentIndex, candidates]);
 
   // Save the current candidate and move to the next
-  const handleSaveCandidate = () => {
-    if (currentCandidate) {
-      setSavedCandidates([...savedCandidates, currentCandidate]);
-    }
-    handleNextCandidate();
+  const handleSaveCandidate = (candidate: Candidate) => {
+    saveCandidate(candidate);
+    handleNextCandidate(); // Move to the next candidate
   };
 
   // Move to the next candidate
   const handleNextCandidate = () => {
-    if (currentIndex < candidates.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      setCurrentCandidate(null); // Set to null when no more candidates are available
-    }
+    setCurrentIndex((prevIndex) => prevIndex + 1);
+  };
+
+  const handleSkipCandidate = () => {
+    handleNextCandidate(); // Skip the current candidate
   };
 
   // Check if there are no more candidates
@@ -63,18 +61,58 @@ const CandidateSearch = () => {
   return (
     <div>
       <h1>Candidate Search</h1>
-      {currentCandidate && (
-        <div>
-          <img src={currentCandidate.avatar_url} alt={`${currentCandidate.login}'s avatar`} />
-          <h2>{currentCandidate.name || currentCandidate.login}</h2>
-          <p>Location: {currentCandidate.location || 'N/A'}</p>
-          <p>Company: {currentCandidate.company || 'N/A'}</p>
-          <p>Email: {currentCandidate.email || 'N/A'}</p>
-          <p>GitHub: <a href={currentCandidate.html_url} target="_blank" rel="noopener noreferrer">{currentCandidate.html_url}</a></p>
-          <button onClick={handleSaveCandidate}>Save</button>
-          <button onClick={handleNextCandidate}>Next</button>
+      <div style={{ width: '300px', margin: '0 auto', borderRadius: '10px', overflow: 'hidden' }}>
+        <div style={{ display: 'flex', flexFlow: 'column', alignItems: 'center', borderRadius: '10px', overflow: 'hidden' }}>
+          <img
+            src={currentCandidate.avatar_url}
+            alt={`${currentCandidate.login}'s avatar`}
+            style={{
+              width: '300px',
+              height: '100%',
+              borderTopLeftRadius: '10px',
+              borderTopRightRadius: '10px',
+            }}
+          />
+          <div
+            style={{
+              width: '300px',
+              flexGrow: 1,
+              backgroundColor: 'black',
+              color: 'white',
+              padding: '10px',
+              borderBottomLeftRadius: '10px',
+              borderBottomRightRadius: '10px',
+            }}
+          >
+            <p style={{ marginLeft: 15 }}>
+              Name: {`${currentCandidate.name || 'N/A'} (${currentCandidate.login})`}
+            </p>
+            <p style={{ marginLeft: 15 }}>Location: {currentCandidate.location || 'N/A'}</p>
+            <p style={{ marginLeft: 15 }}>Email: {currentCandidate.email || 'N/A'}</p>
+            <p style={{ marginLeft: 15 }}>Company: {currentCandidate.company || 'N/A'}</p>
+            <p style={{ marginLeft: 15 }}>Bio: {currentCandidate.bio || 'N/A'}</p>
+          </div>
         </div>
-      )}
+
+        <div
+          className="button-container"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '300px',
+            textAlign: 'center',
+            marginTop: '10px',
+          }}
+        >
+          <button onClick={handleSkipCandidate} className="circle-btn-minus">
+            <code>&#8212;</code>
+          </button>
+          <button onClick={() => handleSaveCandidate(currentCandidate)} className="circle-btn-plus">
+            +
+          </button>
+          
+        </div>
+      </div>
     </div>
   );
 };
